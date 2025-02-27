@@ -1,0 +1,21 @@
+# Use a lightweight Python image
+FROM python:3.10
+
+# Set working directory
+WORKDIR /app
+
+# Copy all necessary files
+COPY . /app
+
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install google-cloud-storage
+
+# Set API_URL as an environment variable (this will be overridden by Cloud Run at deployment)
+ENV API_URL="http://127.0.0.1:8080"
+
+# Expose port 8080 for Cloud Run
+EXPOSE 8080
+
+# Run Streamlit app
+CMD ["streamlit", "run", "app.py", "--server.port", "8080", "--server.address", "0.0.0.0"]
