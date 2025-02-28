@@ -7,12 +7,14 @@ This project is a name generator app inspired by Ursula K. Le Guin's "The Dispos
 * Generates unique names based on simple patterns.
 * Uses a Python backend with FastAPI and Uvicorn for efficient API serving.
 * Features a Streamlit frontend for a user-friendly experience.
-* Data storage using SQLite database.
+* Data storage using SQLite database stored in a Google Cloud Storage bucket, enabling Cloud Run to access persistent data and allowing for scalability.
 * Deployed on Google Cloud Run using Docker for containerization, with separately deployed Dockerfiles for backend and frontend.
 
 ## Live Demo
 
 https://name-gen-ui-581282400880.europe-west1.run.app/
+
+![Name Generator Demo](name_gen_demo.gif)
 
 ## Technologies Used
 
