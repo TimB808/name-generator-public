@@ -1,6 +1,6 @@
 # What's in a Name? - An Anarresti Name Generator
 
-This project is a name generator app inspired by Ursula K. Le Guin's "The Dispossessed," where names on the planet Anarres are assigned by a computer.
+This project is a name generator app inspired by Ursula K. Le Guin's "The Dispossessed," where names on the planet Anarres are assigned by a computer. Online at https://name-gen-ui-581282400880.europe-west1.run.app/.
 
 ## Features
 
@@ -12,7 +12,7 @@ This project is a name generator app inspired by Ursula K. Le Guin's "The Dispos
 
 ## Live Demo
 
-https://name-gen-ui-581282400880.europe-west1.run.app/
+Visit live page at https://name-gen-ui-581282400880.europe-west1.run.app/
 
 ![Name Generator Demo](name_gen_demo.gif)
 
@@ -70,6 +70,16 @@ https://name-gen-ui-581282400880.europe-west1.run.app/
 
 6.  Open your browser and navigate to `http://localhost:8080` (or the Streamlit port if different).
 
+### Local Database Setup
+If running locally, the database is stored in names.db. To override this location, set:
+
+    ```bash
+    export DB_PATH=/path/to/names.db  # macOS/Linux  
+    set DB_PATH=C:\path\to\names.db  # Windows  
+    ```
+
+The Cloud Run deployment automatically fetches the database from Google Cloud Storage.
+
 ### Docker Deployment
 
 1.  Build the Docker images:
@@ -91,15 +101,21 @@ https://name-gen-ui-581282400880.europe-west1.run.app/
     *Replace `your-gcp-project-id` with your google cloud project id.*
 
 3.  Deploy to Google Cloud Run:
-
+   *For initial deployment, only run the commands for the backend / api, then use the deployed API URL for deploying the frontend*
+    
     ```bash
-    gcloud run deploy name-generator-ui --image gcr.io/your-gcp-project-id/name-generator-ui --platform managed --region your-region
-    gcloud run deploy name-generator-api --image gcr.io/your-gcp-project-id/name-generator-api --platform managed --region your-region
+    gcloud run deploy name-generator-ui --image gcr.io/your-gcp-project-id/name-generator-ui --region your-region --allow-unauthenticated --set-env-vars API_URL=your-api-url
+    gcloud run deploy name-generator-api --image gcr.io/your-gcp-project-id/name-generator-api --region your-region --allow-unauthenticated
     ```
 
-    *Replace `your-gcp-project-id` with your google cloud project id and `your-region` with the region you are deploying to.*
+    *Replace `your-gcp-project-id` with your google cloud project id and `your-region` with the region you are deploying to; replace your-api-url with the API_URL returned in step 4 below.*
 
-4. After the initial deployment of the api, set the API_URL environment variable in the front end Cloud Run service, to point to the back end Cloud Run service URL.
+5. After the initial deployment of the api, use the following command to get the deployed API_URL. This then needs to be set in the cloud run deploy command when deploying the frontend Cloud Run service, to ensure it points to the backend Cloud Run service (see step 3).
+
+   ```bash
+   gcloud run services describe name-generator-api --format="value(status.url)"
+   ```
+
 
 ## Files to highlight
 
